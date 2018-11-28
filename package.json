@@ -1,0 +1,20 @@
+{
+  "name": "serverless-plugin-ncc",
+  "description": "A serverless plugin to use @zeit/ncc for bundling",
+  "version": "0.0.1",
+  "author": "Jaydeep Solanki <jaydp17@gmail.com> (https://jaydp.com)",
+  "bugs": {
+    "url": "https://github.com/jaydp17/serverless-plugin-ncc/issues"
+  },
+  "homepage": "https://github.com/jaydp17/serverless-plugin-ncc#readme",
+  "keywords": [],
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaydp17/serverless-plugin-ncc.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
