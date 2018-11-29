@@ -12,7 +12,9 @@
     "make-dir": "1.3.0"
   },
   "devDependencies": {
+    "@jaydp17/eslint-config": "0.1.1",
     "@types/serverless": "^1.18.0",
+    "eslint": "^5.9.0",
     "prettier": "1.15.2"
   },
   "homepage": "https://github.com/jaydp17/serverless-plugin-ncc#readme",
@@ -24,6 +26,8 @@
     "url": "git+https://github.com/jaydp17/serverless-plugin-ncc.git"
   },
   "scripts": {
+    "format": "prettier --write '**/*.{js,json,yaml,yml,md}'",
+    "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
