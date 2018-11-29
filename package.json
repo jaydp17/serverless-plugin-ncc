@@ -6,10 +6,17 @@
   "bugs": {
     "url": "https://github.com/jaydp17/serverless-plugin-ncc/issues"
   },
+  "dependencies": {
+    "@zeit/ncc": "0.1.16"
+  },
+  "devDependencies": {
+    "@types/serverless": "^1.18.0",
+    "prettier": "1.15.2"
+  },
   "homepage": "https://github.com/jaydp17/serverless-plugin-ncc#readme",
   "keywords": [],
   "license": "MIT",
-  "main": "index.js",
+  "main": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jaydp17/serverless-plugin-ncc.git"
