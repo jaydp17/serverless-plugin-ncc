@@ -7,7 +7,8 @@
     "url": "https://github.com/jaydp17/serverless-plugin-ncc/issues"
   },
   "dependencies": {
-    "@zeit/ncc": "0.1.16"
+    "@zeit/ncc": "0.1.16",
+    "archiver": "3.0.0"
   },
   "devDependencies": {
     "@types/serverless": "^1.18.0",
