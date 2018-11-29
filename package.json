@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "@zeit/ncc": "0.1.16",
-    "archiver": "3.0.0"
+    "archiver": "3.0.0",
+    "make-dir": "1.3.0"
   },
   "devDependencies": {
     "@types/serverless": "^1.18.0",
