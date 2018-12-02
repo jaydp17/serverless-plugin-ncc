@@ -1,25 +1,9 @@
-const _ = require('lodash');
-const path = require('path');
-const { handlerToFileName } = require('./utils');
+import _ from 'lodash';
+import path from 'path';
+import { handlerToFileName } from './utils';
+import Serverless from 'serverless';
 
-/**
- * @typedef {object} FileDetails
- * @prop {string} absPath
- * @prop {string} name
- */
-
-/**
- * @typedef {object} ServiceFilesConfig
- * @prop {FileDetails} zip
- * @prop {FileDetails[]} files
- */
-
-/**
- *
- * @param {*} serverless
- * @returns {ServiceFilesConfig[]}
- */
-function parseServiceConfig(serverless) {
+export default function parseServiceConfig(serverless: Serverless) {
   const individually = !!_.get(serverless, 'service.package.individually');
   if (individually) {
     return packageIndividually(serverless);
@@ -27,11 +11,7 @@ function parseServiceConfig(serverless) {
   return packageAllTogether(serverless);
 }
 
-/**
- * @param {*} serverless
- * @returns {ServiceFilesConfig[]}
- */
-function packageIndividually(serverless) {
+function packageIndividually(serverless: Serverless) {
   const { servicePath } = serverless.config;
   const { functions } = serverless.service;
   const serviceFilesConfigArr = _.map(functions, ({ name: serviceName, handler }, functionName) => {
@@ -56,11 +36,7 @@ function packageIndividually(serverless) {
   return serviceFilesConfigArr;
 }
 
-/**
- * @param {*} serverless
- * @returns {ServiceFilesConfig[]}
- */
-function packageAllTogether(serverless) {
+function packageAllTogether(serverless: Serverless) {
   const { servicePath } = serverless.config;
   const zipName = `${serverless.service.service}.zip`;
   const zipPath = path.join(servicePath, `.serverless/${zipName}`);
@@ -72,5 +48,3 @@ function packageAllTogether(serverless) {
   });
   return [{ zip: { name: zipName, absPath: zipPath }, files }];
 }
-
-module.exports = parseServiceConfig;

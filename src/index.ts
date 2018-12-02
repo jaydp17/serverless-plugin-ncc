@@ -1,12 +1,17 @@
-const _ = require('lodash');
-const path = require('path');
-const makeDir = require('make-dir');
-const compiler = require('./compiler');
-const zipper = require('./zipper');
-const parseServiceConfig = require('./parse-service-config');
+import _ from 'lodash';
+import path from 'path';
+import makeDir from 'make-dir';
+import Serverless from 'serverless';
 
-class ServerlessPlugin {
-  constructor(serverless, options) {
+import compiler from './compiler';
+import parseServiceConfig from './parse-service-config';
+const zipper = require('./zipper');
+
+export default class ServerlessPlugin {
+  serverless: Serverless;
+  options: Serverless.Options;
+  hooks: { [key in string]: Function };
+  constructor(serverless: Serverless, options: Serverless.Options) {
     this.serverless = serverless;
     this.options = options;
 

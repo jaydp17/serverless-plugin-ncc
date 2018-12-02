@@ -1,7 +1,11 @@
-const fs = require('fs');
-const archiver = require('archiver');
+import fs from 'fs';
+import archiver from 'archiver';
 
-async function createZip({ zipPath, zipContents }) {
+type CreateZipOptions = {
+  zipPath: string;
+  zipContents: { data: string; name: string }[];
+};
+export default async function createZip({ zipPath, zipContents }: CreateZipOptions) {
   const zipStream = fs.createWriteStream(zipPath);
   const archive = archiver('zip', { zlib: { level: 9 } });
 
@@ -47,5 +51,3 @@ async function createZip({ zipPath, zipContents }) {
     archive.finalize();
   });
 }
-
-module.exports = createZip;
