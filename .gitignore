@@ -62,3 +62,4 @@ typings/
 
 # compiled output
 lib
+dist
