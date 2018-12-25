@@ -40,6 +40,11 @@
   "peerDependencies": {
     "@zeit/ncc": "^0.7.0"
   },
+  "release-it": {
+    "github": {
+      "release": true
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jaydp17/serverless-plugin-ncc.git"
