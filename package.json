@@ -54,6 +54,7 @@
     "build:watch": "npm run build -- --watch",
     "format": "prettier --write '**/*.{js,json,yaml,yml,md}'",
     "lint": "eslint .",
+    "prepack": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
