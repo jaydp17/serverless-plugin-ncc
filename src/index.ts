@@ -38,7 +38,7 @@ export default class ServerlessPlugin {
     const packagingPromises = packageFilesConfig.map(async ({ zip, files }) => {
       // For now pass all ncc options directly to ncc. This has the benefit of testing out new
       // ncc releases and changes quickly. Later it would be nice to add a validation step in between.
-      const codeCompilePromises = files.map(({ absPath }) => compiler({ inputFilePath: absPath }, ncc));
+      const codeCompilePromises = files.map(({ absPath }) => compiler({ inputFilePath: absPath, ...ncc}));
       const compiledCodes = await Promise.all(codeCompilePromises);
       const zipperFiles = createZipperFiles(files, compiledCodes);
       await zipper({ zipPath: zip.absPath, zipContents: zipperFiles });
@@ -87,8 +87,7 @@ function createZipperFiles(files: IFileNameAndPath[], compiledCodes: CompiledOut
         }
 
         content.push({
-          // Not sure if utf8 is ok, Assets can be of any format...
-          data: compilerOutput.assets![assetName].source.toString('utf8'),
+          data: compilerOutput.assets![assetName].source,
           name: `${path}${ assetName }`,
         })
       })

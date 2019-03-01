@@ -2,7 +2,7 @@ import fs from 'fs';
 import archiver from 'archiver';
 
 export type ZipContent = {
-  data: string;
+  data: string | Buffer;
   name: string;
 }
 

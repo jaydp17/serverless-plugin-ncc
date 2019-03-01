@@ -42,7 +42,7 @@ typings/
 # Optional npm cache directory
 .npm
 
-# Optional efslint cache
+# Optional eslint cache
 .eslintcache
 
 # Optional REPL history
