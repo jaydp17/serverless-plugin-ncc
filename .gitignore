@@ -42,7 +42,7 @@ typings/
 # Optional npm cache directory
 .npm
 
-# Optional eslint cache
+# Optional efslint cache
 .eslintcache
 
 # Optional REPL history
@@ -53,6 +53,7 @@ typings/
 
 # Yarn Integrity file
 .yarn-integrity
+yarn.lock
 
 # dotenv environment variables file
 .env
@@ -63,3 +64,6 @@ typings/
 # compiled output
 lib
 dist
+
+# IDE
+.idea
