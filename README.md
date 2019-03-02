@@ -29,6 +29,20 @@ functions:
     handler: src/index.handler
 ```
 
+## Pass options
+
+Custom options can be passed to ncc like this:
+```yml
+# serverless.yml
+
+custom:
+  ncc:
+    minify: true
+
+```
+Note that all options are currently passed directly to ncc. To view all possible options
+check the [ncc docs](https://github.com/zeit/ncc#programmatically-from-nodejs)
+
 ## License
 
 MIT

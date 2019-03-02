@@ -53,6 +53,7 @@ typings/
 
 # Yarn Integrity file
 .yarn-integrity
+yarn.lock
 
 # dotenv environment variables file
 .env
@@ -63,3 +64,6 @@ typings/
 # compiled output
 lib
 dist
+
+# IDE
+.idea

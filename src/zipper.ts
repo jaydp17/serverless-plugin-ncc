@@ -1,9 +1,14 @@
 import fs from 'fs';
 import archiver from 'archiver';
 
+export type ZipContent = {
+  data: string | Buffer;
+  name: string;
+}
+
 type CreateZipOptions = {
   zipPath: string;
-  zipContents: { data: string; name: string }[];
+  zipContents: ZipContent[];
 };
 export default async function createZip({ zipPath, zipContents }: CreateZipOptions) {
   const zipStream = fs.createWriteStream(zipPath);
