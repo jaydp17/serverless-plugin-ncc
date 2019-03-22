@@ -38,7 +38,7 @@
   "license": "MIT",
   "main": "dist/index.js",
   "peerDependencies": {
-    "@zeit/ncc": "^0.15.2"
+    "@zeit/ncc": ">=0.15.2"
   },
   "release-it": {
     "github": {
