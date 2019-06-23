@@ -30,7 +30,8 @@ export default class ServerlessPlugin {
   async package() {
     this.serverless.cli.log('running ncc');
     const { servicePath } = this.serverless.config;
-    const { ncc = {} } = this.serverless.service.custom;
+    const slsService = this.serverless.service;
+    const ncc = (slsService && slsService.custom && slsService.custom.ncc) || {};
     const dotServerlessPath = path.join(servicePath, '.serverless');
     await makeDir(dotServerlessPath);
 
