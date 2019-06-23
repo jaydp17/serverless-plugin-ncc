@@ -1,7 +1,7 @@
 {
   "name": "serverless-plugin-ncc",
   "description": "A serverless plugin to use @zeit/ncc for bundling",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "author": "Jaydeep Solanki <jaydp17@gmail.com> (https://jaydp.com)",
   "bugs": {
     "url": "https://github.com/jaydp17/serverless-plugin-ncc/issues"
