@@ -38,7 +38,9 @@ export default class ServerlessPlugin {
     const packagingPromises = packageFilesConfig.map(async ({ zip, files }) => {
       // For now pass all ncc options directly to ncc. This has the benefit of testing out new
       // ncc releases and changes quickly. Later it would be nice to add a validation step in between.
-      const codeCompilePromises = files.map(({ absPath }) => compiler({ inputFilePath: absPath, ...ncc}));
+      const codeCompilePromises = files.map(({ absPath }) =>
+        compiler({ inputFilePath: absPath, ...ncc }),
+      );
       const compiledCodes = await Promise.all(codeCompilePromises);
       const zipperFiles = createZipperFiles(files, compiledCodes);
       await zipper({ zipPath: zip.absPath, zipContents: zipperFiles });
@@ -49,7 +51,10 @@ export default class ServerlessPlugin {
   }
 }
 
-function createZipperFiles(files: IFileNameAndPath[], compiledCodes: CompiledOutput[]): ZipContent[] {
+function createZipperFiles(
+  files: IFileNameAndPath[],
+  compiledCodes: CompiledOutput[],
+): ZipContent[] {
   if (files.length !== compiledCodes.length) {
     throw new Error('Expecting NCC output for all files.');
   }
@@ -74,7 +79,6 @@ function createZipperFiles(files: IFileNameAndPath[], compiledCodes: CompiledOut
       });
     }
 
-
     if (compilerOutput.assets) {
       // Assets are relative to the 'code' file. But because of keeping the file
       // structure in the zip output all assets need to be written to the same directory.
@@ -88,9 +92,9 @@ function createZipperFiles(files: IFileNameAndPath[], compiledCodes: CompiledOut
 
         content.push({
           data: compilerOutput.assets![assetName].source,
-          name: `${path}${ assetName }`,
-        })
-      })
+          name: `${path}${assetName}`,
+        });
+      });
     }
   });
 
