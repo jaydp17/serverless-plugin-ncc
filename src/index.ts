@@ -94,6 +94,7 @@ function createZipperFiles(
         content.push({
           data: compilerOutput.assets![assetName].source,
           name: `${path}${assetName}`,
+          mode: compilerOutput.assets![assetName].permissions,
         });
       });
     }
