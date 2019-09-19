@@ -51,8 +51,12 @@ export default async function createZip({ zipPath, zipContents }: CreateZipOptio
     archive.pipe(zipStream);
 
     for (const zipContent of zipContents) {
-      archive.append(zipContent.data, { name: zipContent.name });
+      archive.append(zipContent.data, {
+        name: zipContent.name,
+        mode: zipContent.mode,
+      });
     }
+
     archive.finalize();
   });
 }
