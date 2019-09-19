@@ -4,6 +4,7 @@ import archiver from 'archiver';
 export type ZipContent = {
   data: string | Buffer;
   name: string;
+  mode?: number; // mode represents the permissions of the file
 }
 
 type CreateZipOptions = {
