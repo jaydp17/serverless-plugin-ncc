@@ -31,12 +31,14 @@ export default class ServerlessPlugin {
     this.serverless.cli.log('running ncc');
     const { servicePath } = this.serverless.config;
     const slsService = this.serverless.service;
-    const ncc = (slsService && slsService.custom && slsService.custom.ncc) || {};
+    const gncc = (slsService && slsService.custom && slsService.custom.ncc) || {};
     const dotServerlessPath = path.join(servicePath, '.serverless');
     await makeDir(dotServerlessPath);
 
     const packageFilesConfig = await parseServiceConfig(this.serverless);
-    const packagingPromises = packageFilesConfig.map(async ({ zip, files }) => {
+    const packagingPromises = packageFilesConfig.filter(Boolean).map(async (pkg) => {
+      const { zip, files, ncc: lncc = {} } = pkg;
+      const ncc = Object.assign({}, gncc, lncc);
       // For now pass all ncc options directly to ncc. This has the benefit of testing out new
       // ncc releases and changes quickly. Later it would be nice to add a validation step in between.
       const codeCompilePromises = files.map(({ absPath }) =>
@@ -108,7 +110,12 @@ function setArtifacts(serverless: Serverless, serviceFilesConfigArr: IPackagingC
   if (!individually) {
     _.set(serverless, 'service.package.artifact', serviceFilesConfigArr[0].zip.absPath);
   } else {
-    for (const { functionName, zip } of serviceFilesConfigArr) {
+    for (const cnf of serviceFilesConfigArr) {
+      if (!cnf) {
+        continue;
+      }
+
+      const { functionName, zip } = cnf;
       if (!functionName) {
         throw new Error('functionName cannot be empty when packaging individually');
       }
