@@ -10,3 +10,9 @@ export interface IFileNameAndPath {
   name: string;
   absPath: string;
 }
+
+export type CompiledAsset = {
+  source: Buffer;
+  permissions: number;
+  name: string;
+};

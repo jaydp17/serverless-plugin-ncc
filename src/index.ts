@@ -2,11 +2,12 @@ import { CompiledOutput } from '@zeit/ncc';
 import _ from 'lodash';
 import path from 'path';
 import makeDir from 'make-dir';
+import { readFile, stat } from 'mz/fs';
 import Serverless from 'serverless';
 
 import compiler from './compiler';
 import parseServiceConfig, { IPackagingConfig } from './parse-service-config';
-import { IFileNameAndPath } from './types';
+import { IFileNameAndPath, CompiledAsset } from './types';
 import zipper, { ZipContent } from './zipper';
 
 export default class ServerlessPlugin {
@@ -36,16 +37,32 @@ export default class ServerlessPlugin {
     await makeDir(dotServerlessPath);
 
     const packageFilesConfig = await parseServiceConfig(this.serverless);
-    const packagingPromises = packageFilesConfig.filter(Boolean).map(async (pkg) => {
+    const packagingPromises = packageFilesConfig.filter(Boolean).map(async pkg => {
       const { zip, files, perFunctionNccConfig = {} } = pkg;
       const nccConfig = Object.assign({}, globalNccConfig, perFunctionNccConfig);
+      const { includeAssets = [] } = nccConfig;
+
       // For now pass all ncc options directly to ncc. This has the benefit of testing out new
       // ncc releases and changes quickly. Later it would be nice to add a validation step in between.
       const codeCompilePromises = files.map(({ absPath }) =>
         compiler({ inputFilePath: absPath, ...nccConfig }),
       );
+
       const compiledCodes = await Promise.all(codeCompilePromises);
-      const zipperFiles = createZipperFiles(files, compiledCodes);
+      const compiledAssets: CompiledAsset[] = await Promise.all(
+        includeAssets.map(
+          async (name: string): Promise<CompiledAsset> => {
+            const fullpath = path.join(servicePath, name);
+            return {
+              name,
+              source: await readFile(fullpath),
+              permissions: (await stat(fullpath)).mode,
+            };
+          },
+        ),
+      );
+
+      const zipperFiles = createZipperFiles(files, compiledCodes, compiledAssets.filter(Boolean));
       await zipper({ zipPath: zip.absPath, zipContents: zipperFiles });
     });
     setArtifacts(this.serverless, packageFilesConfig);
@@ -57,12 +74,17 @@ export default class ServerlessPlugin {
 function createZipperFiles(
   files: IFileNameAndPath[],
   compiledCodes: CompiledOutput[],
+  compiledAssets: CompiledAsset[] = [],
 ): ZipContent[] {
   if (files.length !== compiledCodes.length) {
     throw new Error('Expecting NCC output for all files.');
   }
 
   const content: ZipContent[] = [];
+
+  compiledAssets.forEach(({ name, source, permissions }) => {
+    return content.push({ name, mode: permissions, data: source });
+  });
 
   files.forEach((file, index) => {
     const compilerOutput = compiledCodes[index];
