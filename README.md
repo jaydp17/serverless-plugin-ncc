@@ -38,10 +38,39 @@ Custom options can be passed to ncc like this:
 custom:
   ncc:
     minify: true
-
 ```
 Note that all options are currently passed directly to ncc. To view all possible options
 check the [ncc docs](https://github.com/zeit/ncc#programmatically-from-nodejs)
+
+## Pass custom options per-function
+
+Passing custom options to a function is as simple as introducing a custom block under the function with your ncc config
+
+```yml
+# serverless.yml
+
+functions:
+  hello:
+    handler: src/hello/index.hello
+    custom:
+      ncc:
+        minify: false
+```
+
+## Disable ncc per function
+
+You can pass `enabled: false` as custom config per function to disable ncc on that function
+
+```yml
+# serverless.yml
+
+functions:
+  hello:
+    handler: src/hello/index.hello
+    custom:
+      ncc:
+        enabled: false
+```
 
 ## License
 
