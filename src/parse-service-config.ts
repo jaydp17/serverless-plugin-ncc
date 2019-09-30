@@ -23,7 +23,11 @@ async function packageIndividually(serverless: Serverless): Promise<IPackagingCo
   const functions: { [key: string]: ServerlessFunctionDefinition } = serverless.service.functions;
   const serviceFilesConfigArrPromises = _.map(
     functions,
-    async ({ name: serviceName, handler }, functionName) => {
+    async ({ name: serviceName, handler, custom = {} }, functionName) => {
+      if (custom && custom.ncc && custom.ncc.enabled === false) {
+        return;
+      }
+
       const { name: fileName, absPath: filePath } = await handlerToFileDetails(
         servicePath,
         handler,
@@ -31,6 +35,7 @@ async function packageIndividually(serverless: Serverless): Promise<IPackagingCo
       const zipName = `${serviceName}.zip`;
       const zipPath = path.join(servicePath, `.serverless/${zipName}`);
       return {
+        ncc: _.get(custom, 'ncc', {}),
         functionName,
         zip: {
           absPath: zipPath,
