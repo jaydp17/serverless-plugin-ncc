@@ -3,6 +3,7 @@ import path from 'path';
 import { handlerToFileDetails } from './utils';
 import Serverless from 'serverless';
 import { ServerlessFunctionDefinition, IFileNameAndPath } from './types';
+import Service from 'serverless/classes/Service';
 
 export default function parseServiceConfig(serverless: Serverless) {
   const individually = !!_.get(serverless, 'service.package.individually');
@@ -16,6 +17,7 @@ export interface IPackagingConfig {
   functionName?: string;
   zip: IFileNameAndPath;
   files: IFileNameAndPath[];
+  perFunctionNccConfig?: Service.Custom;
 }
 async function packageIndividually(serverless: Serverless): Promise<IPackagingConfig[]> {
   const { servicePath } = serverless.config;
@@ -35,7 +37,7 @@ async function packageIndividually(serverless: Serverless): Promise<IPackagingCo
       const zipName = `${serviceName}.zip`;
       const zipPath = path.join(servicePath, `.serverless/${zipName}`);
       return {
-        ncc: _.get(custom, 'ncc', {}),
+        perFunctionNccConfig: _.get(custom, 'ncc', {}),
         functionName,
         zip: {
           absPath: zipPath,
@@ -51,7 +53,7 @@ async function packageIndividually(serverless: Serverless): Promise<IPackagingCo
     },
   );
   const serviceFilesConfigArr = await Promise.all(serviceFilesConfigArrPromises);
-  return serviceFilesConfigArr;
+  return serviceFilesConfigArr.filter(Boolean) as IPackagingConfig[];
 }
 
 async function packageAllTogether(serverless: Serverless): Promise<IPackagingConfig[]> {

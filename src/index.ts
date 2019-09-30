@@ -31,18 +31,18 @@ export default class ServerlessPlugin {
     this.serverless.cli.log('running ncc');
     const { servicePath } = this.serverless.config;
     const slsService = this.serverless.service;
-    const gncc = (slsService && slsService.custom && slsService.custom.ncc) || {};
+    const globalNccConfig = (slsService && slsService.custom && slsService.custom.ncc) || {};
     const dotServerlessPath = path.join(servicePath, '.serverless');
     await makeDir(dotServerlessPath);
 
     const packageFilesConfig = await parseServiceConfig(this.serverless);
     const packagingPromises = packageFilesConfig.filter(Boolean).map(async (pkg) => {
-      const { zip, files, ncc: lncc = {} } = pkg;
-      const ncc = Object.assign({}, gncc, lncc);
+      const { zip, files, perFunctionNccConfig = {} } = pkg;
+      const nccConfig = Object.assign({}, globalNccConfig, perFunctionNccConfig);
       // For now pass all ncc options directly to ncc. This has the benefit of testing out new
       // ncc releases and changes quickly. Later it would be nice to add a validation step in between.
       const codeCompilePromises = files.map(({ absPath }) =>
-        compiler({ inputFilePath: absPath, ...ncc }),
+        compiler({ inputFilePath: absPath, ...nccConfig }),
       );
       const compiledCodes = await Promise.all(codeCompilePromises);
       const zipperFiles = createZipperFiles(files, compiledCodes);
