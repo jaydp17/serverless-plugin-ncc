@@ -28,7 +28,7 @@
     "babel-plugin-add-module-exports": "^1.0.0",
     "eslint": "^5.9.0",
     "prettier": "1.15.2",
-    "release-it": "^12.4.1"
+    "release-it": "^15.6.0"
   },
   "files": [
     "dist/**"
